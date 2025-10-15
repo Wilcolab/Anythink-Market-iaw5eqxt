@@ -1,0 +1,20 @@
+function toSnakeCase(input) {
+    if (!input && input !== 0) return '';
+    const s = String(input)
+        .normalize('NFKD').replace(/[\u0300-\u036f]/g, '') // remove diacritics
+        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')             // camelCase boundary
+        .replace(/([A-Z]+)([A-Z][a-z0-9]+)/g, '$1 $2')     // acronym + Word
+        .replace(/([a-zA-Z])([0-9])/g, '$1 $2')            // letter+number
+        .replace(/([0-9])([a-zA-Z])/g, '$1 $2')            // number+letter
+        .replace(/[^0-9a-zA-Z]+/g, ' ')                    // non-alnum -> space
+        .trim()
+        .toLowerCase();
+    return s === '' ? '' : s.split(/\s+/).join('_');
+}
+
+// Examples
+console.log(toSnakeCase('HelloWorld'));           // hello_world
+console.log(toSnakeCase('some text--here'));      // some_text_here
+console.log(toSnakeCase('JSONData123More'));      // json_data_123_more
+console.log(toSnakeCase("Café-au-lait"));         // cafe_au_lait
+console.log(toSnakeCase('  already_snake_case ')); // already_snake_case
